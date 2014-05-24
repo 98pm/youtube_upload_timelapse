@@ -6,6 +6,7 @@ import os
 import random
 import sys
 import time
+import datetime
 
 from apiclient.discovery import build
 from apiclient.errors import HttpError
@@ -70,6 +71,7 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
 VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
 
+VIDEO_FILENAME = "/home/pi/video.mp4"
 
 def get_authenticated_service(args):
   flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
@@ -92,13 +94,13 @@ def initialize_upload(youtube, options):
 
   body=dict(
     snippet=dict(
-      title=options.title,
-      description=options.description,
-      tags=tags,
-      categoryId=options.category
+      title=datetime.datetime.today().strftime("%m-%d-%Y"),
+      description="",
+      tags="",
+      categoryId=""
     ),
     status=dict(
-      privacyStatus=options.privacyStatus
+      privacyStatus=VALID_PRIVACY_STATUSES[2]
     )
   )
 
@@ -117,7 +119,7 @@ def initialize_upload(youtube, options):
     # practice, but if you're using Python older than 2.6 or if you're
     # running on App Engine, you should set the chunksize to something like
     # 1024 * 1024 (1 megabyte).
-    media_body=MediaFileUpload(options.file, chunksize=-1, resumable=True)
+    media_body=MediaFileUpload(VIDEO_FILENAME, chunksize=-1, resumable=True)
   )
 
   resumable_upload(insert_request)
