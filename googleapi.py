@@ -71,8 +71,6 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
 VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
 
-VIDEO_FILENAME = "/home/pi/tlcam.avi"
-
 def get_authenticated_service(args):
   flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
     scope=YOUTUBE_UPLOAD_SCOPE,
@@ -94,13 +92,13 @@ def initialize_upload(youtube, options):
 
   body=dict(
     snippet=dict(
-      title=datetime.datetime.today().strftime("%m-%d-%Y"),
-      description="",
-      tags="",
-      categoryId=""
+      title=datetime.datetime.today().strftime("%d-%m-%Y"),
+      description=options.description,
+      tags=tags,
+      categoryId=options.category
     ),
     status=dict(
-      privacyStatus=VALID_PRIVACY_STATUSES[2]
+      privacyStatus=options.privacyStatus
     )
   )
 
@@ -119,7 +117,7 @@ def initialize_upload(youtube, options):
     # practice, but if you're using Python older than 2.6 or if you're
     # running on App Engine, you should set the chunksize to something like
     # 1024 * 1024 (1 megabyte).
-    media_body=MediaFileUpload(VIDEO_FILENAME, chunksize=-1, resumable=True)
+    media_body=MediaFileUpload(options.file, chunksize=-1, resumable=True)
   )
 
   resumable_upload(insert_request)
