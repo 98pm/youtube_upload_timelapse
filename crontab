@@ -1,0 +1,3 @@
+*/1 7-19 * * * /home/pi/timelapse.sh
+2 20 * * * /home/pi/mvtimelapse.sh
+30 21 * * * /home/pi/uploadvideo.sh
